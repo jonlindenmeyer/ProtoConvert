@@ -1,0 +1,43 @@
+﻿@page "/guidgenerator"
+@using CurrieTechnologies.Razor.Clipboard
+@inject ClipboardService clipboard
+@rendermode InteractiveServer
+
+<h3>Guid Generator</h3>
+
+<PageTitle>Guid Generator</PageTitle>
+
+<p role="status">Guid: @guid</p>
+
+<button class="btn btn-primary" @onclick="Refresh">New Guid</button>
+
+<button class="btn btn-primary" @onclick="Copy">Copy Guid</button>
+
+<p role="status">@errorMEssage</p>
+
+@code {
+    private Guid guid = Guid.NewGuid();
+    private string errorMEssage;
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     await Copy();
+    //     await base.OnInitializedAsync();
+    // }
+    private void Refresh()
+    {
+        guid = Guid.NewGuid();
+    }
+
+    private async Task Copy()
+    {
+        try
+        {
+            await clipboard.WriteTextAsync(guid.ToString());
+        }
+        catch (Exception ex)
+        {
+            errorMEssage = ex.Message;
+        }      
+    }
+}

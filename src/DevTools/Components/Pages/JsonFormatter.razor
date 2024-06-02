@@ -1,0 +1,19 @@
+﻿@page "/jsonformatter"
+@using System.Text.Json;
+@rendermode InteractiveServer
+<h3>Json Formatter</h3>
+
+<InputTextArea class="large-textbox" rows="5" @bind-Value="@json"></InputTextArea>
+<button @onclick="Format">Formatar para JSON</button>
+
+@code {
+    private string json = string.Empty;
+
+    void Format()
+    {
+        var jsonDocument = JsonDocument.Parse(json);
+        json = JsonSerializer.Serialize(
+            jsonDocument.RootElement, 
+            new JsonSerializerOptions { WriteIndented = true });
+    }
+}

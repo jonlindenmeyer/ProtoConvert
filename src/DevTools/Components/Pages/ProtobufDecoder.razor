@@ -1,0 +1,33 @@
+﻿@page "/protobufdecoder"
+@using System.Text.Json;
+@using DevTools.Encoding
+@rendermode InteractiveServer
+<h3>ProtobufDecoder</h3>
+
+<InputTextArea class="large-textbox" rows="5" @bind-Value="@messageByte"></InputTextArea>
+<InputTextArea class="large-textbox" rows="5" @bind-Value="@className"></InputTextArea>
+<InputTextArea class="large-textbox" rows="5" @bind-Value="@classText"></InputTextArea>
+<InputTextArea class="large-textbox" rows="5" @bind-Value="@json"></InputTextArea>
+<button @onclick="Decoding">Decoding</button>
+
+@code {
+    private string json = string.Empty;
+    private string classText = string.Empty;
+    private string messageByte = string.Empty;
+    private string className = string.Empty;
+
+    private void Decoding()
+    {
+        try
+        {
+            var assembly = Compiling.RuntimeCompiling.Compile(classText);
+            var type = assembly.GetType(className);
+            json = ProtoDecoder.Decode(messageByte, type);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+    }
+}
